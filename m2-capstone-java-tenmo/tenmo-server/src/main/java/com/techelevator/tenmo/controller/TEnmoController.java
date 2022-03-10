@@ -4,6 +4,7 @@ import com.techelevator.tenmo.dao.AccountDao;
 import com.techelevator.tenmo.dao.UserDao;
 import com.techelevator.tenmo.model.User;
 import com.techelevator.tenmo.model.Account;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,6 +44,11 @@ public class TEnmoController {
     public List<User> getUsers(Principal principal) {
         return userDao.getUserIdAndName(principal.getName());
     }
+
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @RequestMapping(path = "/transfer", method = RequestMethod.POST)
+
 
 
 

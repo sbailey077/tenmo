@@ -2,6 +2,7 @@ package com.techelevator.tenmo.services;
 
 
 import com.techelevator.tenmo.model.Account;
+import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.model.User;
 import com.techelevator.tenmo.model.UserCredentials;
 
@@ -111,9 +112,18 @@ public class ConsoleService {
         System.out.println();
     }
 
-    public int promptUserForUserID() {
-        String prompt = "Enter ID of user you are sending to (0 to cancel):";
-        return promptForInt(prompt);
+
+    public Transfer getNewTransfer() {
+
+        Transfer transfer = new Transfer();
+
+        String accountPrompt = "Enter ID of user you are sending to (0 to cancel):";
+        transfer.setAccountTo(promptForInt(accountPrompt));
+
+        String amountPrompt = "Enter amount:";
+        transfer.setTransferAmount(promptForBigDecimal(amountPrompt));
+
+        return transfer;
     }
 
 }

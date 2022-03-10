@@ -1,13 +1,7 @@
 package com.techelevator.tenmo;
 
-import com.techelevator.tenmo.model.Account;
-import com.techelevator.tenmo.model.AuthenticatedUser;
-import com.techelevator.tenmo.model.User;
-import com.techelevator.tenmo.model.UserCredentials;
-import com.techelevator.tenmo.services.AccountService;
-import com.techelevator.tenmo.services.AuthenticationService;
-import com.techelevator.tenmo.services.ConsoleService;
-import com.techelevator.tenmo.services.UserService;
+import com.techelevator.tenmo.model.*;
+import com.techelevator.tenmo.services.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -20,6 +14,7 @@ public class App {
     private final AuthenticationService authenticationService = new AuthenticationService(API_BASE_URL);
     private AccountService accountService = new AccountService(API_BASE_URL);
     private UserService userService = new UserService(API_BASE_URL);
+    private TransferService transferService = new TransferService(API_BASE_URL);
 
     private AuthenticatedUser currentUser;
 
@@ -69,6 +64,7 @@ public class App {
         } else {
             accountService.setUser(currentUser);
             userService.setUser(currentUser);
+            transferService.setUser(currentUser);
         }
     }
 
@@ -114,7 +110,8 @@ public class App {
 	private void sendBucks() {
         List<User> users = userService.getAllUsers();
         consoleService.printListOfUsers(users);
-        consoleService.promptUserForUserID();
+        Transfer transfer = consoleService.getNewTransfer();
+        transferService.addNewTransfer(transfer);
 	}
 
 	private void requestBucks() {
