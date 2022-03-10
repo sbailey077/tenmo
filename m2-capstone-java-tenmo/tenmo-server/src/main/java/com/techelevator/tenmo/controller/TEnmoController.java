@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.security.Principal;
+import java.util.List;
 
 @PreAuthorize("isAuthenticated()")
 @RestController
@@ -30,10 +31,17 @@ public class TEnmoController {
     public void setUserDao(UserDao userDao) {
         this.userDao = userDao;
     }
-    @PreAuthorize("permitAll")
+
+
     @RequestMapping(path = "/balance", method = RequestMethod.GET)
     public BigDecimal viewAccountBalance(Principal principal) {
         return accountDao.viewAccountBalance(principal.getName());
+    }
+
+
+    @RequestMapping(path = "/username", method = RequestMethod.GET)
+    public List<User> getUsers(Principal principal) {
+        return userDao.getUserIdAndName(principal.getName());
     }
 
 
