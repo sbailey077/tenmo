@@ -5,6 +5,7 @@ import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.model.User;
 import com.techelevator.tenmo.model.UserCredentials;
+import jdk.swing.interop.SwingInterOpUtils;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.Scanner;
 public class ConsoleService {
 
     private final Scanner scanner = new Scanner(System.in);
+    private final BigDecimal ZERO = new BigDecimal("0");
 
     public int promptForMenuSelection(String prompt) {
         int menuSelection;
@@ -119,6 +121,7 @@ public class ConsoleService {
 
         String accountPrompt = "Enter ID of user you are sending to (0 to cancel):";
         transfer.setAccountTo(promptForInt(accountPrompt));
+
 
         String amountPrompt = "Enter amount:";
         transfer.setTransferAmount(promptForBigDecimal(amountPrompt));

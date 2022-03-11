@@ -56,7 +56,15 @@ public class TEnmoController {
         return transferDao.addNewTransfer(transfer, principal.getName());
     }
 
+    @RequestMapping(path = "/transfer", method = RequestMethod.PUT)
+    public BigDecimal updateSenderBalance(Principal principal, @RequestBody Transfer transfer) {
+        return accountDao.updateFromAccount(transfer, principal.getName());
+    }
 
+    @RequestMapping(path = "/transfer", method = RequestMethod.PUT)
+    public BigDecimal updateRecipientBalance(@RequestBody Transfer transfer) {
+        return accountDao.updateToAccount(transfer);
+    }
 
 
 }

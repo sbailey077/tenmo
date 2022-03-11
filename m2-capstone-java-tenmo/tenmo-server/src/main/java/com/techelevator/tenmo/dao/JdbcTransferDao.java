@@ -36,7 +36,7 @@ public class JdbcTransferDao implements TransferDao{
     }
 
 
-    private int getAccountIdFromUserId(int userId) {
+    public int getAccountIdFromUserId(int userId) {
         String sql = "SELECT account_id FROM account WHERE user_id = ?";
 
         Integer accountId = jdbcTemplate.queryForObject(sql, Integer.class, userId);
@@ -44,7 +44,7 @@ public class JdbcTransferDao implements TransferDao{
         return accountId;
     }
 
-    private int getAccountFromUsername(String username) {
+    public int getAccountFromUsername(String username) {
         String sql = "SELECT account_id FROM account JOIN tenmo_user ON tenmo_user.user_id = account.user_id WHERE username = ?";
 
         Integer accountId = jdbcTemplate.queryForObject(sql, Integer.class, username);

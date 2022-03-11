@@ -1,12 +1,18 @@
 package com.techelevator.tenmo.dao;
 
+import com.techelevator.tenmo.model.Account;
+import com.techelevator.tenmo.model.Transfer;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.security.Principal;
 
 
 public interface AccountDao {
 
-    public BigDecimal viewAccountBalance(String name);
+    BigDecimal viewAccountBalance(String name);
 
+    BigDecimal updateFromAccount(Transfer transfer, String username);
+
+    BigDecimal updateToAccount(Transfer transfer);
 }
