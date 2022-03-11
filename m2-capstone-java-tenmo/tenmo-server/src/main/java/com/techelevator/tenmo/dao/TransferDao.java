@@ -5,5 +5,5 @@ import com.techelevator.tenmo.model.Transfer;
 
 public interface TransferDao {
 
-    public Transfer addNewTransfer();
+    public Transfer addNewTransfer(Transfer transfer);
 }

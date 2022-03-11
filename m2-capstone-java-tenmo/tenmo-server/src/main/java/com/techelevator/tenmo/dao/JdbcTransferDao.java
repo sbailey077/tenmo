@@ -19,5 +19,6 @@ public class JdbcTransferDao implements TransferDao{
         String sql = "INSERT INTO transfer(" +
                 "employee_id, date_worked, hours_worked, billable, description) " +
                 " VALUES (?, ?, ?, ?, ?) RETURNING timesheet_id;";
+        return transfer;
     }
 }

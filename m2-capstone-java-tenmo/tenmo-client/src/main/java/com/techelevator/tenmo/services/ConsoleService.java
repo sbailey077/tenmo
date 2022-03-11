@@ -123,6 +123,7 @@ public class ConsoleService {
         String amountPrompt = "Enter amount:";
         transfer.setTransferAmount(promptForBigDecimal(amountPrompt));
 
+
         return transfer;
     }
 
