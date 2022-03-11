@@ -1,7 +1,9 @@
 package com.techelevator.tenmo.controller;
 
 import com.techelevator.tenmo.dao.AccountDao;
+import com.techelevator.tenmo.dao.TransferDao;
 import com.techelevator.tenmo.dao.UserDao;
+import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.model.User;
 import com.techelevator.tenmo.model.Account;
 import org.springframework.http.HttpStatus;
@@ -19,10 +21,12 @@ public class TEnmoController {
 
     private UserDao userDao;
     private AccountDao accountDao;
+    private TransferDao transferDao;
 
-    public TEnmoController(UserDao userDao, AccountDao accountDao) {
+    public TEnmoController(UserDao userDao, AccountDao accountDao, TransferDao transferDao) {
         this.userDao = userDao;
         this.accountDao = accountDao;
+        this.transferDao = transferDao;
     }
 
     public UserDao getUserDao() {
@@ -46,8 +50,11 @@ public class TEnmoController {
     }
 
 
-//    @ResponseStatus(HttpStatus.CREATED)
-//    @RequestMapping(path = "/transfer", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.CREATED)
+    @RequestMapping(path = "/transfer", method = RequestMethod.POST)
+    public Transfer enterNewTransfer(Principal principal,@RequestBody Transfer transfer) {
+        return transferDao.addNewTransfer(transfer, principal.getName());
+    }
 
 
 

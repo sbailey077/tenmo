@@ -6,6 +6,7 @@ public class Transfer {
 
     private int transferId;
     private int typeID;
+    private int statusID;
     private int accountTo;
     private int accountFrom;
     private BigDecimal transferAmount;
@@ -24,6 +25,14 @@ public class Transfer {
 
     public void setTypeID(int typeID) {
         this.typeID = typeID;
+    }
+
+    public int getStatusID() {
+        return statusID;
+    }
+
+    public void setStatusID(int statusID) {
+        this.statusID = statusID;
     }
 
     public int getAccountTo() {
