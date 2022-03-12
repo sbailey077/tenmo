@@ -1,12 +1,10 @@
 package com.techelevator.tenmo.services;
 
 
-import com.techelevator.tenmo.model.Account;
-import com.techelevator.tenmo.model.Transfer;
-import com.techelevator.tenmo.model.User;
-import com.techelevator.tenmo.model.UserCredentials;
+import com.techelevator.tenmo.model.*;
 import jdk.swing.interop.SwingInterOpUtils;
 
+import javax.swing.table.TableRowSorter;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Scanner;
@@ -114,6 +112,22 @@ public class ConsoleService {
         System.out.println();
     }
 
+    public void printListOfTransfers(List<Transfer> transfers) {
+        System.out.println("----------------------------");
+        System.out.println("Transfers");
+        System.out.printf("%-15s %-15s %-10s", "ID", "From/To", "Amount"  );
+        System.out.println();
+        System.out.println("----------------------------");
+
+        for(Transfer transfer : transfers) {
+            System.out.printf("%-15s", transfer.getTransferId());
+            System.out.printf("%-15s", "To: " + transfer.getAccountTo());
+            System.out.printf("%-10s", "$ " + transfer.getTransferAmount());
+            System.out.println();
+        }
+
+    }
+
 
     public Transfer getNewTransfer() {
 
@@ -122,17 +136,40 @@ public class ConsoleService {
         String accountPrompt = "Enter ID of user you are sending to (0 to cancel):";
         transfer.setAccountTo(promptForInt(accountPrompt));
 
-
         String amountPrompt = "Enter amount:";
         transfer.setTransferAmount(promptForBigDecimal(amountPrompt));
 
+        while (transfer.getTransferAmount().compareTo(ZERO) <= 0) {
+            sendMoreThanZeroMessage();
+            transfer.setTransferAmount(promptForBigDecimal(amountPrompt));
+        }
+
         transfer.setTypeID(2);
         transfer.setStatusID(2);
-
-
         return transfer;
     }
 
+    public boolean checkGreaterThanZero(BigDecimal amount) {
+
+        if (amount.compareTo(ZERO) <= 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public void sendMoreThanZeroMessage() {
+        System.out.println("You must enter an amount greater than zero.");
+    }
+
+    public boolean checkTransferLessThanUserBalance(BigDecimal accountBalance, BigDecimal transferAmount) {
+       if (accountBalance.compareTo(transferAmount) < 0) {
+           System.out.println("You cannot send more than you have in your account.");
+           return false;
+       } else {
+           return true;
+       }
+    }
 
 
 }

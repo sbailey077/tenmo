@@ -7,7 +7,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class JdbcTransferDao implements TransferDao{
@@ -23,6 +26,8 @@ public class JdbcTransferDao implements TransferDao{
 
         transfer.setAccountTo(getAccountIdFromUserId(transfer.getAccountTo()));
         transfer.setAccountFrom(getAccountFromUsername(username));
+        updateSenderAccount(transfer.getTransferAmount(), getAccountFromUsername(username));
+        updateRecipientAccount(transfer.getTransferAmount(), transfer.getAccountTo());
 
         String sql = "INSERT INTO transfer(" +
                 "transfer_type_id, transfer_status_id, account_from, account_to, amount) " +
@@ -33,6 +38,23 @@ public class JdbcTransferDao implements TransferDao{
         transfer.setTransferId(id);
 
         return transfer;
+    }
+
+    @Override
+    public List<Transfer> getTransfers(String username) {
+        List<Transfer> transfers = new ArrayList<Transfer>();
+        int userId = getAccountFromUsername(username);
+        String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount "+
+                "FROM transfer WHERE account_from = ? OR account_to = ?";
+
+        SqlRowSet row = jdbcTemplate.queryForRowSet(sql, userId, userId);
+
+        while(row.next()) {
+            Transfer transfer = mapRowToTransfer(row);
+            transfers.add(transfer);
+        }
+
+        return transfers;
     }
 
 
@@ -52,6 +74,31 @@ public class JdbcTransferDao implements TransferDao{
         return accountId;
     }
 
+    private void updateSenderAccount(BigDecimal amountToSubtract, int accountFrom) {
+
+        String sql = "UPDATE account SET balance = balance - ? WHERE account_id = ?";
+
+        jdbcTemplate.update(sql, amountToSubtract, accountFrom);
+    }
+
+    private void updateRecipientAccount (BigDecimal amountToAdd, int accountTo) {
+
+        String sql = "UPDATE account SET balance = balance + ? WHERE account_id = ?";
+
+        jdbcTemplate.update(sql, amountToAdd, accountTo);
+    }
+
+    private Transfer mapRowToTransfer(SqlRowSet row) {
+        Transfer transfer = new Transfer();
+        transfer.setTransferId(row.getInt("transfer_id"));
+        transfer.setTypeID(row.getInt("transfer_type_id"));
+        transfer.setStatusID(row.getInt("transfer_status_id"));
+        transfer.setAccountFrom(row.getInt("account_from"));
+        transfer.setAccountTo(row.getInt("account_to"));
+        transfer.setTransferAmount(row.getBigDecimal("amount"));
+
+        return transfer;
+    }
 
 
 

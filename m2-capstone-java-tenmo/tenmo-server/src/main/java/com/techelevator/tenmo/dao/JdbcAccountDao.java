@@ -26,45 +26,8 @@ public class JdbcAccountDao implements AccountDao{
         return accountBalance;
     }
 
-    @Override
-    public BigDecimal updateFromAccount(Transfer transfer, String username) {
 
-        BigDecimal currentBalance = viewAccountBalance(username);
-        BigDecimal updatedBalance =  currentBalance.subtract(transfer.getTransferAmount());
 
-        String sql = "UPDATE account SET balance = ? WHERE user_id = ?";
 
-        jdbcTemplate.update(sql, BigDecimal.class, updatedBalance, getAccountFromUsername(username));
 
-        return updatedBalance;
-    }
-
-    @Override
-    public BigDecimal updateToAccount(Transfer transfer) {
-
-        BigDecimal currentBalance = viewAccountBalance(getUsernameFromUserId(transfer.getAccountTo()));
-        BigDecimal updatedBalance = currentBalance.add(transfer.getTransferAmount());
-
-        String sql = "UPDATE account SET balance = ? WHERE user_id = ?";
-
-        jdbcTemplate.update(sql, BigDecimal.class, updatedBalance, transfer.getAccountTo());
-
-        return updatedBalance;
-    }
-
-    private int getAccountFromUsername(String username) {
-        String sql = "SELECT account_id FROM account JOIN tenmo_user ON tenmo_user.user_id = account.user_id WHERE username = ?";
-
-        Integer accountId = jdbcTemplate.queryForObject(sql, Integer.class, username);
-
-        return accountId;
-    }
-
-    private String getUsernameFromUserId(int userId) {
-        String sql = "SELECT username FROM tenmo_user WHERE user_id = ?";
-
-        String username = jdbcTemplate.queryForObject(sql, String.class, userId);
-
-        return username;
-    }
 }

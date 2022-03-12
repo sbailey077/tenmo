@@ -12,7 +12,5 @@ public interface AccountDao {
 
     BigDecimal viewAccountBalance(String name);
 
-    BigDecimal updateFromAccount(Transfer transfer, String username);
 
-    BigDecimal updateToAccount(Transfer transfer);
 }

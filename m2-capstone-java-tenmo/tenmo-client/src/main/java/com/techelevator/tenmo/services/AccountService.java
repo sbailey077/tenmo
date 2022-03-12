@@ -33,7 +33,7 @@ public class AccountService {
         headers.setBearerAuth(user.getToken());
         HttpEntity<Void> entity = new HttpEntity<>(headers);
 
-        BigDecimal balance = restTemplate.exchange(baseUrl + "balance", HttpMethod.GET, entity, BigDecimal.class).getBody();
+        BigDecimal balance = restTemplate.exchange(baseUrl + "username/balance", HttpMethod.GET, entity, BigDecimal.class).getBody();
 
         return balance;
     }

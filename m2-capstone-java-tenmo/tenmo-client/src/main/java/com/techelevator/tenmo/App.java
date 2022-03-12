@@ -98,7 +98,8 @@ public class App {
 	}
 
 	private void viewTransferHistory() {
-		// TODO Auto-generated method stub
+		List<Transfer> transfers = transferService.getAllTransfers();
+        consoleService.printListOfTransfers(transfers);
 		
 	}
 
@@ -111,6 +112,9 @@ public class App {
         List<User> users = userService.getAllUsers();
         consoleService.printListOfUsers(users);
         Transfer transfer = consoleService.getNewTransfer();
+        while(!consoleService.checkTransferLessThanUserBalance(accountService.viewAccountBalance(), transfer.getTransferAmount())) {
+            transfer = consoleService.getNewTransfer();
+        }
         transferService.addNewTransfer(transfer);
 	}
 
