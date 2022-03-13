@@ -43,7 +43,7 @@ public class TransferService {
         headers.setBearerAuth(user.getToken());
         HttpEntity<Void> entity = new HttpEntity<>(headers);
 
-        Transfer[] transfers = restTemplate.exchange(baseUrl + "/account/" + user.getUser().getUsername() +"/transfer", HttpMethod.GET, entity, Transfer[].class).getBody();
+        Transfer[] transfers = restTemplate.exchange(baseUrl + "account/" + user.getUser().getUsername() +"/transfer", HttpMethod.GET, entity, Transfer[].class).getBody();
         return Arrays.asList(transfers);
     }
 }

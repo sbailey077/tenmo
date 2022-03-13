@@ -56,9 +56,10 @@ public class TEnmoController {
         return transferDao.addNewTransfer(transfer, principal.getName());
     }
 
+
     @RequestMapping(path = "/account/{username}/transfer", method = RequestMethod.GET)
-    public List<Transfer> getTransfers(@PathVariable String username, Principal principal) {
-        return transferDao.getTransfers(principal.getName());
+    public List<Transfer> getAllTransfers(@PathVariable String username, Principal principal) {
+        return transferDao.getAllTransfers(principal.getName());
     }
 
 }

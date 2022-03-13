@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
+import javax.websocket.OnClose;
 import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.ArrayList;
@@ -41,20 +42,58 @@ public class JdbcTransferDao implements TransferDao{
     }
 
     @Override
-    public List<Transfer> getTransfers(String username) {
+    public List<Transfer> getTransfersFrom(String username) {
         List<Transfer> transfers = new ArrayList<Transfer>();
-        int userId = getAccountFromUsername(username);
-        String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount "+
-                "FROM transfer WHERE account_from = ? OR account_to = ?";
+        int accountId = getAccountFromUsername(username);
 
-        SqlRowSet row = jdbcTemplate.queryForRowSet(sql, userId, userId);
+        String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount " +
+                "FROM transfer " +
+                "WHERE account_from = ?";
+
+        SqlRowSet row = jdbcTemplate.queryForRowSet(sql, accountId);
 
         while(row.next()) {
             Transfer transfer = mapRowToTransfer(row);
+            transfer.setUsernameFrom(getUsernameFromAccount(accountId));
+            transfer.setUsernameTo(getUsernameFromAccount(transfer.getAccountTo()));
+            transfer.setTransferType("To: ");
             transfers.add(transfer);
         }
 
         return transfers;
+    }
+
+    @Override
+    public List<Transfer> getTransfersTo(String username) {
+        List<Transfer> transfers = new ArrayList<Transfer>();
+        int accountId = getAccountFromUsername(username);
+
+        String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount " +
+        "FROM transfer WHERE account_to = ?";
+
+        SqlRowSet row = jdbcTemplate.queryForRowSet(sql, accountId);
+
+        while (row.next()) {
+            Transfer transfer = mapRowToTransfer(row);
+            transfer.setUsernameFrom(getUsernameFromAccount(transfer.getAccountFrom()));
+            transfer.setUsernameTo(getUsernameFromAccount(accountId));
+            transfer.setTransferType("From: ");
+            transfers.add(transfer);
+        }
+
+        return transfers;
+    }
+
+    @Override
+    public List<Transfer> getAllTransfers(String username) {
+        List<Transfer> transfersFrom = getTransfersFrom(username);
+        List<Transfer> transfersTo = getTransfersTo(username);
+        List<Transfer> allTransfers = new ArrayList<Transfer>();
+
+        allTransfers.addAll(transfersFrom);
+        allTransfers.addAll(transfersTo);
+
+        return allTransfers;
     }
 
 
@@ -74,6 +113,16 @@ public class JdbcTransferDao implements TransferDao{
         return accountId;
     }
 
+    private String getUsernameFromAccount(int accountId) {
+        String sql = "SELECT tenmo_user.username FROM " +
+                "account JOIN tenmo_user ON tenmo_user.user_id = account.user_id " +
+                "WHERE account.account_id = ?";
+
+        String username = jdbcTemplate.queryForObject(sql, String.class, accountId);
+
+        return username;
+    }
+
     private void updateSenderAccount(BigDecimal amountToSubtract, int accountFrom) {
 
         String sql = "UPDATE account SET balance = balance - ? WHERE account_id = ?";
@@ -87,6 +136,7 @@ public class JdbcTransferDao implements TransferDao{
 
         jdbcTemplate.update(sql, amountToAdd, accountTo);
     }
+
 
     private Transfer mapRowToTransfer(SqlRowSet row) {
         Transfer transfer = new Transfer();

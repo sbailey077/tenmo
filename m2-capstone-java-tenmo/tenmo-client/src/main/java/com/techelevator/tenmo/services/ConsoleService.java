@@ -121,7 +121,12 @@ public class ConsoleService {
 
         for(Transfer transfer : transfers) {
             System.out.printf("%-15s", transfer.getTransferId());
-            System.out.printf("%-15s", "To: " + transfer.getAccountTo());
+            System.out.printf("%-2s", transfer.getTransferType());
+            if (transfer.getTransferType().equalsIgnoreCase("To: ")) {
+                System.out.println(transfer.getUsernameTo());
+            } else {
+                System.out.println(transfer.getUsernameFrom());
+            }
             System.out.printf("%-10s", "$ " + transfer.getTransferAmount());
             System.out.println();
         }

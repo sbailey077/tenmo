@@ -14,6 +14,10 @@ public interface TransferDao {
 
     int getAccountIdFromUserId(int userId);
 
-    List<Transfer> getTransfers(String username);
+    List<Transfer> getTransfersTo(String username);
+
+    List<Transfer> getTransfersFrom(String username);
+
+    List<Transfer> getAllTransfers(String username);
 
 }

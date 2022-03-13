@@ -10,6 +10,33 @@ public class Transfer {
     private int accountTo;
     private int accountFrom;
     private BigDecimal transferAmount;
+    private String transferType;
+    private String usernameTo;
+    private String usernameFrom;
+
+    public String getTransferType() {
+        return transferType;
+    }
+
+    public void setTransferType(String transferType) {
+        this.transferType = transferType;
+    }
+
+    public String getUsernameTo() {
+        return usernameTo;
+    }
+
+    public void setUsernameTo(String usernameTo) {
+        this.usernameTo = usernameTo;
+    }
+
+    public String getUsernameFrom() {
+        return usernameFrom;
+    }
+
+    public void setUsernameFrom(String usernameFrom) {
+        this.usernameFrom = usernameFrom;
+    }
 
     public int getTransferId() {
         return transferId;
