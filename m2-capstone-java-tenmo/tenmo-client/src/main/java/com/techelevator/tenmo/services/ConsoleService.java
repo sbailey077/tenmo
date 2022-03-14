@@ -115,7 +115,7 @@ public class ConsoleService {
     public void printListOfTransfers(List<Transfer> transfers) {
         System.out.println("----------------------------");
         System.out.println("Transfers");
-        System.out.printf("%-15s %-15s %-10s", "ID", "From/To", "Amount"  );
+        System.out.printf("%-14s %-18s %-10s", "ID", "From/To", "Amount"  );
         System.out.println();
         System.out.println("----------------------------");
 
@@ -123,9 +123,9 @@ public class ConsoleService {
             System.out.printf("%-15s", transfer.getTransferId());
             System.out.printf("%-2s", transfer.getTransferType());
             if (transfer.getTransferType().equalsIgnoreCase("To: ")) {
-                System.out.println(transfer.getUsernameTo());
+                System.out.printf("%-15s", transfer.getUsernameTo());
             } else {
-                System.out.println(transfer.getUsernameFrom());
+                System.out.printf("%-13s", transfer.getUsernameFrom());
             }
             System.out.printf("%-10s", "$ " + transfer.getTransferAmount());
             System.out.println();
@@ -141,6 +141,7 @@ public class ConsoleService {
         String accountPrompt = "Enter ID of user you are sending to (0 to cancel):";
         transfer.setAccountTo(promptForInt(accountPrompt));
 
+
         String amountPrompt = "Enter amount:";
         transfer.setTransferAmount(promptForBigDecimal(amountPrompt));
 
@@ -152,15 +153,6 @@ public class ConsoleService {
         transfer.setTypeID(2);
         transfer.setStatusID(2);
         return transfer;
-    }
-
-    public boolean checkGreaterThanZero(BigDecimal amount) {
-
-        if (amount.compareTo(ZERO) <= 0) {
-            return false;
-        } else {
-            return true;
-        }
     }
 
     public void sendMoreThanZeroMessage() {
@@ -176,5 +168,25 @@ public class ConsoleService {
        }
     }
 
+    public Transfer getTransferDetails() {
 
+        Transfer transfer = new Transfer();
+
+        String transferPrompt = "Please enter transfer ID to view details (0 to cancel): ";
+        transfer.setTransferId(promptForInt(transferPrompt));
+
+        return transfer;
+    }
+
+    public void printRequestedTransfer(Transfer transfer) {
+        System.out.println("----------------------------");
+        System.out.println("Transfer Details");
+        System.out.println("----------------------------");
+        System.out.println("Id: " + transfer.getTransferId());
+        System.out.println("From: " + transfer.getUsernameFrom());
+        System.out.println("To: " + transfer.getUsernameTo());
+        System.out.println("Type: " + transfer.getTransferType());
+        System.out.println("Status: " + transfer.getTransferStatus());
+        System.out.println("Amount: " + transfer.getTransferAmount());
+    }
 }

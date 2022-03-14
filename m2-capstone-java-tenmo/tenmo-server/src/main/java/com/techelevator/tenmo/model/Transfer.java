@@ -13,6 +13,15 @@ public class Transfer {
     private String transferType;
     private String usernameTo;
     private String usernameFrom;
+    private String transferStatus;
+
+    public String getTransferStatus() {
+        return transferStatus;
+    }
+
+    public void setTransferStatus(String transferStatus) {
+        this.transferStatus = transferStatus;
+    }
 
     public String getTransferType() {
         return transferType;

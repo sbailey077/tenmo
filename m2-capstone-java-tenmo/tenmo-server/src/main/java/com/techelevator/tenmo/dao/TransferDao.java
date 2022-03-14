@@ -20,4 +20,6 @@ public interface TransferDao {
 
     List<Transfer> getAllTransfers(String username);
 
+    Transfer getRequestedTransfer(int transferID);
+
 }

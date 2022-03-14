@@ -46,5 +46,15 @@ public class TransferService {
         Transfer[] transfers = restTemplate.exchange(baseUrl + "account/" + user.getUser().getUsername() +"/transfer", HttpMethod.GET, entity, Transfer[].class).getBody();
         return Arrays.asList(transfers);
     }
+
+    public Transfer getRequestedTransfer(Transfer transfer) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(user.getToken());
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Transfer> entity = new HttpEntity<Transfer>(transfer, headers);
+
+        Transfer response = restTemplate.exchange(baseUrl + "transfer/" + transfer.getTransferId(), HttpMethod.GET, entity, Transfer.class).getBody();
+        return response;
+    }
 }
 

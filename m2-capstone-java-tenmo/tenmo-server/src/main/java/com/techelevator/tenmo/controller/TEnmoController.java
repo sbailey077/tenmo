@@ -62,4 +62,9 @@ public class TEnmoController {
         return transferDao.getAllTransfers(principal.getName());
     }
 
+    @RequestMapping(path = "/transfer/{transferId}", method = RequestMethod.GET)
+    public Transfer getRequestedTransfer(@PathVariable int transferId) {
+        return transferDao.getRequestedTransfer(transferId);
+    }
+
 }

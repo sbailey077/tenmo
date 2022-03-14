@@ -100,7 +100,12 @@ public class App {
 	private void viewTransferHistory() {
 		List<Transfer> transfers = transferService.getAllTransfers();
         consoleService.printListOfTransfers(transfers);
-		
+        Transfer transfer = consoleService.getTransferDetails();
+        if (transfer.getTransferId() == 0) {
+            mainMenu();
+        } else {
+            consoleService.printRequestedTransfer(transferService.getRequestedTransfer(transfer));
+        }
 	}
 
 	private void viewPendingRequests() {
@@ -115,7 +120,11 @@ public class App {
         while(!consoleService.checkTransferLessThanUserBalance(accountService.viewAccountBalance(), transfer.getTransferAmount())) {
             transfer = consoleService.getNewTransfer();
         }
-        transferService.addNewTransfer(transfer);
+        if (transfer.getAccountTo() == 0) {
+            mainMenu();
+        } else {
+            transferService.addNewTransfer(transfer);
+        }
 	}
 
 	private void requestBucks() {
